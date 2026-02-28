@@ -178,11 +178,11 @@
                 .header-title-wrap { display:flex; align-items:center; gap:12px; }
                 .header-title { font-size:16px; font-weight:700; letter-spacing:-0.02em; }
                 .header-meta { font-size:12px; color:#86868b; font-weight:500; }
-                .player-viewport { flex:1; width:100%; display:flex; flex-direction:column; align-items:center; background:#f2f2f7; position:relative; overflow:hidden; padding:14px 40px 40px 40px; box-sizing:border-box; }
+                .player-viewport { flex:1; width:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; background:#f2f2f7; position:relative; overflow:hidden; padding:20px 40px; box-sizing:border-box; }
                 
                 /* Invert rrweb-player layout & Apple Style */
-                #v { background:#fff; border-radius:10px; box-shadow:0 30px 70px rgba(0,0,0,0.12); overflow:hidden; display:flex; flex-direction:column-reverse; }
-                .rr-player { border:none !important; background:#fff !important; }
+                #v { background:#fff; border-radius:10px; box-shadow:0 30px 70px rgba(0,0,0,0.12); overflow:hidden; }
+                .rr-player { border:none !important; background:#fff !important; display:flex !important; flex-direction:column-reverse !important; width:100% !important; height:100% !important; }
                 .rr-controller { 
                     border-top: none !important; 
                     border-bottom: 1px solid rgba(0,0,0,0.05) !important; 
@@ -196,7 +196,12 @@
                 /* Surgical cleanup of internal UI */
                 .rr-controller__btns > .svelte-19ke1iv:last-child { display: none !important; }
                 .rr-controller__btns > .switch { display: none !important; }
-                
+                .rr-controller {flex-direction:row-reverse !important; justify-content:center !important; height:40px !important;}
+                .rr-timeline {width:50% !important;}
+                /* Scale reduction for better fit - User preferred 0.79 */
+                /* transform-origin: top ensures we don't bleed into the controller if it's at the top, center keeps it centered */
+                .rr-replayer-wrapper { transform: scale(0.79) !important; transform-origin: center center !important; flex: 1 !important; display: flex !important; align-items: center !important; justify-content: center !important; overflow: hidden !important; }
+
                 /* High-visibility Tracky Blue Cursor */
                 .rr-replayer-mouse {
                     width: 14px !important;
@@ -230,14 +235,19 @@
                 
                 const resizePlayer = () => {
                     const margin = 28;
+                    const controllerHeight = 40; 
+                    const headerHeight = 48;
+                    const verticalPadding = 80; // Even larger padding for absolute safety
                     const availableW = window.innerWidth - (margin * 2);
-                    const availableH = window.innerHeight - 48 - 14 - 40; // 48:header, 14:gap, 40:bottom
+                    const availableH = window.innerHeight - headerHeight - verticalPadding - controllerHeight; 
                     
                     const scale = Math.min(availableW / recWidth, availableH / recHeight, 1);
-                    const playerW = recWidth * scale;
-                    const playerH = recHeight * scale;
+                    const playerW = Math.floor(recWidth * scale);
+                    const playerH = Math.floor(recHeight * scale) + controllerHeight;
 
                     const mountPoint = document.getElementById("v");
+                    mountPoint.style.width = playerW + 'px';
+                    mountPoint.style.height = playerH + 'px';
                     mountPoint.innerHTML = '';
                     new rrwebPlayer({ 
                         target: mountPoint, 
