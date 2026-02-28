@@ -1,0 +1,39 @@
+{
+  "manifest_version": 3,
+  "name": "Tracky",
+  "version": "1.0.0",
+  "description": "Tracky - 专业追踪记录小助手",
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "storage",
+    "downloads"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "rrweb-all.min.js",
+        "content.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "action": {
+    "default_title": "Tracky",
+    "default_popup": "popup.html"
+  }
+}
