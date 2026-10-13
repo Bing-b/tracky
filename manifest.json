@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "Tracky",
-  "version": "1.0.0",
-  "description": "Tracky - 专业追踪记录小助手",
+  "version": "1.1.0",
+  "description": "Tracky - 专业级 DOM 会话复现与控制台报错诊断扩展",
   "permissions": [
     "activeTab",
     "scripting",
@@ -34,6 +34,21 @@
   },
   "action": {
     "default_title": "Tracky",
-    "default_popup": "popup.html"
-  }
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "demo.html"
+      ],
+      "matches": [
+        "<all_urls>"
+      ]
+    }
+  ]
 }

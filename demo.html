@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tracky 插件体验测试场 (Interactive Playground)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --border: #e2e8f0;
+      --text: #0f172a;
+      --muted: #64748b;
+      --accent: #2563eb;
+      --danger: #ef4444;
+      --success: #10b981;
+      --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: var(--font-sans);
+      line-height: 1.5;
+      padding: 32px 20px 80px;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    /* HEADER */
+    .header {
+      margin-bottom: 32px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 24px;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      color: var(--accent);
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .title {
+      font-size: 1.8rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 8px;
+    }
+    .desc {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    /* INSTRUCTIONS CALLOUT */
+    .callout {
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      border-left: 4px solid var(--accent);
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin-bottom: 28px;
+      font-size: 0.88rem;
+      color: #334155;
+    }
+    .callout ol {
+      margin-left: 20px;
+      margin-top: 8px;
+    }
+    .callout li {
+      margin-bottom: 4px;
+    }
+    kbd {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 4px;
+      padding: 2px 6px;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      box-shadow: 0 1px 1px rgba(0,0,0,0.06);
+    }
+
+    /* GRID LAYOUT */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      gap: 20px;
+      margin-bottom: 28px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    }
+    .card-title {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .card-sub {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+
+    /* BUTTONS */
+    .btn {
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn:active { transform: translateY(1px); }
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-primary:hover { background: #1d4ed8; }
+    .btn-danger { background: var(--danger); color: #fff; }
+    .btn-danger:hover { background: #dc2626; }
+    .btn-outline { background: #fff; border-color: var(--border); color: #334155; }
+    .btn-outline:hover { background: #f8fafc; border-color: #94a3b8; }
+
+    /* FORM ELEMENTS */
+    .form-group {
+      margin-bottom: 12px;
+    }
+    .form-label {
+      display: block;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: #475569;
+      margin-bottom: 4px;
+    }
+    .input {
+      width: 100%;
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.85rem;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+    }
+
+    /* COUNTER LIST */
+    .todo-list {
+      list-style: none;
+      margin-top: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .todo-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 12px;
+      background: #f8fafc;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      border: 1px solid var(--border);
+    }
+
+    /* CANVAS TEST */
+    canvas {
+      width: 100%;
+      height: 140px;
+      background: #0f172a;
+      border-radius: 8px;
+      display: block;
+    }
+
+    /* MODAL */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s;
+    }
+    .modal-backdrop.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .modal-box {
+      background: #fff;
+      border-radius: 12px;
+      padding: 24px;
+      max-width: 400px;
+      width: 90%;
+      box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="header">
+      <div class="badge">
+        <span>⚡ Tracky 测试场</span>
+      </div>
+      <h1 class="title">交互复现与诊断验证 Playground</h1>
+      <p class="desc">你可以使用此页面测试 Tracky 插件的录制、点击轨迹还原、Canvas 图表捕捉及控制台报错抓取。</p>
+    </div>
+
+    <div class="callout">
+      <strong>💡 快速上手测试步骤：</strong>
+      <ol>
+        <li>在页面右侧悬浮条点击 <strong>蓝色录制按钮</strong>（或按快捷键 <kbd>Alt + R</kbd>）开始录制。</li>
+        <li>尝试在下方卡片中：<strong>输入内容</strong>、<strong>操作弹窗</strong>、<strong>点击“模拟报错”按钮</strong>。</li>
+        <li>按快捷键 <kbd>Alt + M</kbd> 标记当前时刻。</li>
+        <li>点击红色停止按钮，然后点击 <strong>绿色下载按钮</strong>（或 <kbd>Alt + E</kbd>）导出报告。</li>
+        <li>双击打开下载的 HTML 报告，查看 1:1 像素级回放及底部的控制台错误追踪。</li>
+      </ol>
+    </div>
+
+    <div class="grid">
+      <!-- 1. 表单与输入捕捉 -->
+      <div class="card">
+        <h2 class="card-title">📝 表单与密码脱敏测试</h2>
+        <p class="card-sub">验证 DOM 变更监听与输入框捕捉</p>
+        <div class="form-group">
+          <label class="form-label">普通文本输入 (支持中英文)</label>
+          <input type="text" class="input" placeholder="输入测试文本..." id="sample-text">
+        </div>
+        <div class="form-group">
+          <label class="form-label">密码字段 (自动掩码脱敏)</label>
+          <input type="password" class="input" placeholder="••••••••" value="SecretPassword123">
+        </div>
+        <div class="form-group">
+          <label class="form-label">下拉选项</label>
+          <select class="input">
+            <option>优先级: P0 紧急阻断</option>
+            <option>优先级: P1 严重故障</option>
+            <option>优先级: P2 普通优化</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- 2. 报错与控制台 Hook 测试 -->
+      <div class="card">
+        <h2 class="card-title">🚨 控制台报错诊断测试</h2>
+        <p class="card-sub">点击下方按钮触发异常，验证报告底部能否抓到堆栈</p>
+        <div style="display:flex; flex-direction:column; gap:10px;">
+          <button class="btn btn-danger" onclick="triggerRuntimeError()">
+            💥 触发 Uncaught Error (JS 崩溃)
+          </button>
+          <button class="btn btn-outline" onclick="triggerConsoleWarn()">
+            ⚠️ 打印 console.warn / error 日志
+          </button>
+          <button class="btn btn-outline" onclick="triggerUnhandledPromise()">
+            ⏳ 触发未捕获 Promise Rejection
+          </button>
+        </div>
+        <div id="error-feedback" style="margin-top:12px; font-size:0.75rem; font-family:var(--font-mono); color:var(--danger);"></div>
+      </div>
+
+      <!-- 3. DOM 动态增删测试 -->
+      <div class="card">
+        <h2 class="card-title">🔄 动态 DOM 节点增删</h2>
+        <p class="card-sub">验证 DOM MutationObserver 高频更新监听</p>
+        <div style="display:flex; gap:8px;">
+          <input type="text" class="input" id="item-input" placeholder="待办事项..." value="测试 Bug 复现节点">
+          <button class="btn btn-primary" onclick="addItem()">添加</button>
+        </div>
+        <ul class="todo-list" id="todo-container">
+          <li class="todo-item">
+            <span>初始测试条目 #1</span>
+            <button class="btn btn-outline" style="padding:2px 6px; font-size:0.7rem;" onclick="this.parentElement.remove()">删除</button>
+          </li>
+        </ul>
+      </div>
+
+      <!-- 4. Canvas 动画图表测试 -->
+      <div class="card">
+        <h2 class="card-title">📊 Canvas 动画图表捕捉</h2>
+        <p class="card-sub">验证 recordCanvas 对帧动画的还原度</p>
+        <canvas id="live-canvas"></canvas>
+      </div>
+
+      <!-- 5. 模态框与浮层测试 -->
+      <div class="card">
+        <h2 class="card-title">🪟 模态对话框与层级测试</h2>
+        <p class="card-sub">验证 z-index 浮层与蒙版渲染</p>
+        <button class="btn btn-primary" onclick="openModal()">打开测试弹窗</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL -->
+  <div class="modal-backdrop" id="demo-modal">
+    <div class="modal-box">
+      <h3 style="margin-bottom:8px;">测试模态弹窗</h3>
+      <p style="color:var(--muted); font-size:0.85rem; margin-bottom:16px;">
+        在录制过程中打开和关闭弹窗，回放时将精准复现 backdrop-filter 模糊效果与蒙层层级。
+      </p>
+      <div style="display:flex; justify-content:flex-end; gap:8px;">
+        <button class="btn btn-outline" onclick="closeModal()">取消</button>
+        <button class="btn btn-primary" onclick="closeModal()">确认</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 1. Error simulation
+    function triggerRuntimeError() {
+      document.getElementById('error-feedback').textContent = "已抛出错误: TypeError: Cannot read properties of undefined (reading 'userInfo')";
+      setTimeout(() => {
+        const obj = undefined;
+        obj.userInfo.name(); // intentionally crash
+      }, 50);
+    }
+
+    function triggerConsoleWarn() {
+      console.warn("[Tracky Demo] 这是一条由用户触发的警告日志:", { code: 4001, timestamp: Date.now() });
+      console.error("[Tracky Demo] 网络请求超时模拟: POST /api/v1/auth/login failed (504 Gateway Timeout)");
+      document.getElementById('error-feedback').textContent = "已写入 console.warn 与 console.error";
+    }
+
+    function triggerUnhandledPromise() {
+      document.getElementById('error-feedback').textContent = "已触发 Unhandled Promise Rejection";
+      Promise.reject(new Error("异步数据加载失败: Network connection lost during fetch"));
+    }
+
+    // 2. DOM List
+    let counter = 2;
+    function addItem() {
+      const input = document.getElementById('item-input');
+      const text = input.value.trim() || `待办事项 #${counter++}`;
+      const li = document.createElement('li');
+      li.className = 'todo-item';
+      li.innerHTML = `<span>${text}</span><button class="btn btn-outline" style="padding:2px 6px; font-size:0.7rem;" onclick="this.parentElement.remove()">删除</button>`;
+      document.getElementById('todo-container').appendChild(li);
+      input.value = '';
+    }
+
+    // 3. Modal
+    function openModal() { document.getElementById('demo-modal').classList.add('active'); }
+    function closeModal() { document.getElementById('demo-modal').classList.remove('active'); }
+
+    // 4. Live Canvas Wave Animation
+    const canvas = document.getElementById('live-canvas');
+    const ctx = canvas.getContext('2d');
+    let step = 0;
+
+    function resizeCanvas() {
+      canvas.width = canvas.clientWidth * (window.devicePixelRatio || 1);
+      canvas.height = canvas.clientHeight * (window.devicePixelRatio || 1);
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    function drawWave() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.beginPath();
+      ctx.lineWidth = 3;
+      ctx.strokeStyle = '#38bdf8';
+
+      const w = canvas.width;
+      const h = canvas.height;
+      const mid = h / 2;
+
+      for (let x = 0; x < w; x++) {
+        const y = mid + Math.sin((x * 0.02) + (step * 0.05)) * (h * 0.28);
+        if (x === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+
+      // secondary pulse
+      ctx.beginPath();
+      ctx.lineWidth = 1.5;
+      ctx.strokeStyle = 'rgba(129, 140, 248, 0.5)';
+      for (let x = 0; x < w; x++) {
+        const y = mid + Math.cos((x * 0.015) - (step * 0.04)) * (h * 0.22);
+        if (x === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+
+      step++;
+      requestAnimationFrame(drawWave);
+    }
+    drawWave();
+  </script>
+
+  <!-- Automatically load Tracky engine for 100% reliable standalone demo testing -->
+  <script src="rrweb-all.min.js"></script>
+  <script src="content.js"></script>
+</body>
+</html>

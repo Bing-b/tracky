@@ -1,86 +1,85 @@
-# Tracky - 专业追踪记录小助手 🚀
+# Tracky 🚀
 
-[English](#english) | [简体中文](#简体中文)
+> 别再发几十兆的 MP4 录屏了。这是一个把 **网页 DOM 变更** 与 **Console 控制台报错** 一起录下来、导出为单文件 HTML 报告的轻量浏览器插件。
 
----
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Chrome Extension](https://img.shields.io/badge/Platform-Chrome%20%7C%20Edge-success.svg)](#安装方式)
+[![Manifest V3](https://img.shields.io/badge/Manifest-V3-orange.svg)](manifest.json)
 
-<div id="简体中文"></div>
-
-## 简介
-
-**Tracky** 是一款专为 **开发者 (Dev)**、**QA 测试人员** 和 **产品经理 (PM)** 设计的轻量级浏览器插件。
-
-与传统录屏工具不同，Tracky 利用 [rrweb](https://github.com/rrweb-io/rrweb) 技术，录制的不是沉重的视频文件，而是网页的 **DOM 变更序列**。这意味着你可以以极小的存储代价，换取像素级的 1:1 还原回放，并支持在回放中直接审查元素、缩放、调整进度。
-
-### 核心价值
-
--   **告别沉重的录屏文件**：不再需要上传数百 MB 的 MP4 文件。
--   **100% 还原复现**：记录所有点击、滚动、输入、甚至是 Canvas 动画（支持 AntV G6 等）。
--   **一键导出，随处查看**：导出为自包含的 HTML 报告，无需安装任何播放器即可在浏览器中查看。
-
-## 主要功能
-
--   **轻量化录制**：基于 DOM 快照与变更记录，文件极小，传输极快。
--   **交互式回放**：内置 rrweb-player，支持暂停、加速、拖拽进度条。
--   **侧边悬浮控制台**：
-    -   垂直侧边吸附，不干扰正常页面操作。
-    -   支持上下拖拽位置。
-    -   纯净 UI，仅保留最核心的“录制”与“导出”。
--   **Canvas 支持**：完美捕捉复杂的图表和可视化绘制过程。
--   **自包含 HTML 导出**：导出的结果是一个独立的网页，集成了播放器和录制数据。
-
-## 使用场景
-
-1.  **Bug 复现 (QA)**：在发现 Bug 时开启录制，将导出的 HTML 报告直接附件到 Jira 或 GitHub Issue 中。
-2.  **代码评审 (Dev)**：在演示新功能或交互逻辑时，发送一个 Tracky 记录比视频更清晰且体积更小。
-3.  **产品演示 (PM)**：快速记录产品原型及用户路径，方便分享给利益相关者。
-
-## 如何使用
-
-1.  **安装**：
-    -   下载此仓库或 Release 包。
-    -   打开 Chrome/Edge 扩展程序 (chrome://extensions)。
-    -   开启“开发者模式”。
-    -   点击“加载已解压的扩展程序”，选择 `tracky` 文件夹。
-2.  **录制**：
-    -   在页面右侧悬浮窗中点击蓝色按钮 (录制图标) 开始。
-    -   在页面上执行你的操作。
-3.  **导出**：
-    -   再次点击红色按钮 (停止图标) 停止录制。
-    -   点击绿色按钮 (下载图标) 导出 HTML 报告。
-4.  **回放**：
-    -   打开下载到本地的 `.html` 文件即可立即查看。
+![Tracky 导出诊断报告与 1:1 像素级回放预览](example.png)
 
 ---
 
-<div id="english"></div>
+## 为什么写这个工具？
 
-## Introduction (English Version)
+日常做前端或全栈开发、QA 提测时，最搞心态的事情之一莫过于：
 
-**Tracky** is a lightweight browser extension designed specifically for **Developers**, **QA Testers**, and **Product Managers**.
+> QA 或产品提了一个 Bug，附件里扔了一个 50MB 的模糊录屏视频。  
+> 开发问：“当时控制台报了什么错？接口返回啥状态码？”  
+> 答复通常是：“没开控制台 / 没注意看 / 刷新后复现不出来了。”
 
-Unlike traditional screen recording tools, Tracky leverages [rrweb](https://github.com/rrweb-io/rrweb) technology to capture the **sequence of DOM mutations** rather than heavy video frames. This results in tiny file sizes while providing pixel-perfect, 1:1 fidelity replays that allow for element inspection and interaction during playback.
+结果开发只能对着视频猜步骤，反复追问。
 
-### Core Highlights
+**Tracky** 就是为了彻底解决这个痛点写的：
+1. **不录视频，录 DOM**：基于 [rrweb](https://github.com/rrweb-io/rrweb) 记录 DOM 变异序列。导出的文件只有几百 KB，体积比视频小几十倍。
+2. **像素级 1:1 回放**：回放时是真实的网页元素渲染，支持放大缩小，告别模糊发虚和鼠标漂移。
+3. **把报错一起抓下来**：录制时自动拦截 `console.error`、`console.warn`、`window.onerror` 以及未捕获的 Promise 异常。
+4. **时序联动**：导出的单文件 HTML 报告自带控制台抽屉，**点击任意一条报错，回放器直接跳到故障发生的瞬间**。
+5. **单文件直接丢给开发**：导出的 `.html` 是独立自包含的，直接丢微信、飞书、贴 Jira 或 GitHub Issue，双击浏览器就能看。
 
--   **Zero Video Burden**: Ditch massive MP4 files for minimal text-based snapshots.
--   **Total Reproduction**: Record every click, scroll, input, and even Canvas animations (e.g., AntV G6).
--   **Self-contained Export**: Generate standalone HTML reports that play back in any browser without extra dependencies.
+---
 
-## Key Features
+## 本地 Demo 快速体验
 
--   **Ultra-light Recording**: Text-based event sequences for maximum efficiency.
--   **Interactive Player**: Built-in player with pause, speed control, and seeking.
--   **Side-anchored UI**: Minimalist console docked to the right edge, vertically draggable.
--   **Canvas Support**: Captures visualization libraries and complex drawing logic.
--   **Standalone HTML**: Export reports that bundle the player and data together.
+项目中自带了一个开箱即用的交互测试场 [`demo.html`](demo.html)：
 
-## Tech Stack
+```bash
+# 安装插件后，直接在浏览器中打开本地 demo.html 即可测试
+# 例如: file:///path/to/tracky/demo.html
+```
 
--   [rrweb](https://github.com/rrweb-io/rrweb) (The core recording engine)
--   Chrome Extension Manifest V3
--   Vanilla JS & CSS (Fast & Native performance)
+在 `demo.html` 里你可以测试：
+- 表单输入与密码字段自动脱敏；
+- **点击“💥 触发 Uncaught Error”按钮**，制造一个真实的运行时崩溃；
+- 观察 Canvas 动态波形图的录制与回放表现；
+- 按 `Alt + R` 录制 10 秒，按 `Alt + M` 标记 Bug，按 `Alt + E` 导出查看最终报告。
 
-## License
+---
 
-[MIT](LICENSE)
+## 核心特性
+
+- **1:1 视口还原**：自研等比视口计算，支持自由切换【自适应窗口】与【1:1 原始尺寸】，无缩放模糊。
+- **自动跳过无操作空闲（Skip Inactive）**：用户停顿发呆的时间自动快进跳过，省去枯燥等待。
+- **关键帧打点（Pinpoint Marker）**：操作到出 Bug 的瞬间按一下 `Alt + M`，时间线上直接插上图钉标记。
+- **轻量微磨砂控制台**：右侧吸附微型胶囊浮窗，带实时录制毫秒表与呼吸灯指示，支持垂直拖拽。
+- **跨域样式与字体保护**：支持 `inlineStylesheet` 与 `collectFonts`，防止外链 CDN 样式丢失导致回放排版坍塌。
+
+---
+
+## 快捷键
+
+| 快捷键 | 作用 |
+| :--- | :--- |
+| `Alt + R` | **开始 / 停止录制** (带动态数字秒表) |
+| `Alt + M` | **标记关键帧** (在时间线上打下当前时刻的书签锚点) |
+| `Alt + E` | **导出诊断报告** (生成 `.html` 报告与原始 `.json` 数据) |
+
+---
+
+## 安装方式
+
+无需复杂构建，原生支持 Chrome 与 Edge（Manifest V3）：
+
+1. 克隆或下载本仓库代码到本地；
+2. 打开 Chromium 内核浏览器（Chrome、Edge 等），访问扩展管理页：`chrome://extensions`；
+3. 打开右上角的 **“开发者模式”** 开关；
+4. 点击 **“加载已解压的扩展程序”**，选择本仓库的 `tracky` 目录即可完成安装；
+5. 在任意网页右侧即可看到 Tracky 控制条（默认已就绪）。
+
+---
+
+## 开源协议
+
+本项目基于 [MIT 许可证](LICENSE) 开源。
+
+纯粹的开发者工具，100% 免费自由使用。无论是个人日常 Debug、团队提测流程改造还是二次开发，欢迎使用。如果对你有帮助，不妨点个 ⭐️ 支持一下！
